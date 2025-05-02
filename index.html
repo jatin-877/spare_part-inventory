@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bike Parts Inventory</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px 0; }
+    .section { margin-bottom: 20px; }
+    textarea { width: 100%; height: 150px; }
+    /* Optional: Style for your name */
+    .author-name {
+      font-size: 18px;
+      color: #555;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bike Parts Inventory</h1>
+  <!-- Added your name here -->
+  <h2 class="author-name">&lt;Jatin Jain&gt;</h2>
+
+  <div class="section">
+    <h3>Search & Sell Part</h3>
+    <input type="text" id="partName" placeholder="Enter part name">
+    <button onclick="searchPart()">Search</button>
+    <div id="partInfo"></div>
+    <input type="number" id="sellQty" placeholder="Number of items to sell">
+    <button onclick="sellPart()">Sell</button>
+  </div>
+
+  <div class="section">
+    <h3>Add or Update Part</h3>
+    <input type="text" id="newPartName" placeholder="Enter part name">
+    <input type="number" id="newPartRate" placeholder="Enter rate">
+    <input type="number" id="newPartQty" placeholder="Enter quantity">
+    <button onclick="addOrUpdatePart()">Add/Update</button>
+  </div>
+
+  <div class="section">
+    <h3>Delete Part</h3>
+    <input type="text" id="deletePartName" placeholder="Enter part name to delete">
+    <button onclick="deletePart()">Delete</button>
+  </div>
+
+  <div class="section">
+    <h3>Inventory</h3>
+    <button onclick="displayInventory()">Show Inventory</button>
+    <textarea id="inventoryDisplay" readonly></textarea>
+  </div>
+
+  <script>
+    const parts = {
+      "hero splendor air filter": { rate: 120, quantity: 15 },
+      "hero splendor clutch plate": { rate: 250, quantity: 10 },
+      "hero hf deluxe brake shoe": { rate: 180, quantity: 20 },
+      "hero hf deluxe spark plug": { rate: 90, quantity: 25 },
+      "hero glamour chain sprocket": { rate: 650, quantity: 12 },
+      "hero passion pro oil filter": { rate: 95, quantity: 18 },
+      "hero xtreme disc pad": { rate: 300, quantity: 10 },
+      "honda shine air filter": { rate: 140, quantity: 16 },
+      "honda shine clutch cable": { rate: 130, quantity: 20 },
+      "honda unicorn chain set": { rate: 750, quantity: 8 },
+      "honda activa 6g spark plug": { rate: 100, quantity: 30 },
+      "honda activa brake shoe": { rate: 170, quantity: 22 },
+      "honda activa shocker": { rate: 1200, quantity: 6 },
+      "bajaj pulsar oil filter": { rate: 110, quantity: 14 },
+      "bajaj pulsar chain kit": { rate: 900, quantity: 10 },
+      "bajaj ct 100 brake shoe": { rate: 150, quantity: 18 },
+      "bajaj platina clutch plate": { rate: 240, quantity: 12 },
+      "bajaj dominar disc pad": { rate: 320, quantity: 8 },
+      "tvs apache air filter": { rate: 130, quantity: 15 },
+      "tvs apache chain sprocket": { rate: 820, quantity: 9 },
+      "tvs jupiter brake shoe": { rate: 165, quantity: 20 },
+      "tvs xl 100 clutch cable": { rate: 90, quantity: 25 },
+      "tvs ntorq spark plug": { rate: 105, quantity: 20 },
+      "royal enfield bullet chain set": { rate: 1100, quantity: 7 },
+      "royal enfield classic air filter": { rate: 200, quantity: 10 },
+      "royal enfield disc pad": { rate: 350, quantity: 6 },
+      "royal enfield clutch cable": { rate: 180, quantity: 8 },
+      "royal enfield oil filter": { rate: 160, quantity: 12 },
+      "yamaha fz spark plug": { rate: 120, quantity: 15 },
+      "yamaha fz chain sprocket": { rate: 870, quantity: 9 },
+      "yamaha r15 disc pad": { rate: 360, quantity: 5 },
+      "yamaha r15 air filter": { rate: 190, quantity: 10 },
+      "yamaha ray z brake shoe": { rate: 155, quantity: 20 },
+      "suzuki access brake shoe": { rate: 160, quantity: 18 },
+      "suzuki access spark plug": { rate: 100, quantity: 22 },
+      "suzuki gixxer chain kit": { rate: 930, quantity: 7 },
+      "suzuki gixxer air filter": { rate: 170, quantity: 11 },
+      "ktm duke disc pad": { rate: 400, quantity: 5 },
+      "ktm duke chain sprocket": { rate: 1150, quantity: 4 },
+      "ktm rc clutch plate": { rate: 550, quantity: 6 },
+      "ktm rc oil filter": { rate: 180, quantity: 9 },
+      "re himalayan disc pad": { rate: 370, quantity: 5 },
+      "re himalayan clutch cable": { rate: 210, quantity: 6 },
+      "honda hornet air filter": { rate: 160, quantity: 10 },
+      "honda hornet brake shoe": { rate: 175, quantity: 12 },
+      "bajaj avenger clutch plate": { rate: 280, quantity: 7 },
+      "bajaj avenger air filter": { rate: 140, quantity: 8 },
+      "tvs raider spark plug": { rate: 110, quantity: 15 },
+      "tvs raider disc pad": { rate: 310, quantity: 10 }
+    };
+
+    function searchPart() {
+      const name = document.getElementById('partName').value.toLowerCase();
+      const info = parts[name];
+      if (info) {
+        document.getElementById('partInfo').innerText = `Rate: ₹${info.rate}, Quantity: ${info.quantity}`;
+      } else {
+        document.getElementById('partInfo').innerText = "Part not found.";
+      }
+    }
+
+    function sellPart() {
+      const name = document.getElementById('partName').value.toLowerCase();
+      const qty = parseInt(document.getElementById('sellQty').value);
+      if (parts[name]) {
+        if (qty > 0 && qty <= parts[name].quantity) {
+          parts[name].quantity -= qty;
+          alert(`Sold ${qty} of "${name}". Remaining: ${parts[name].quantity}`);
+        } else {
+          alert('Invalid quantity. Check stock or input.');
+        }
+      } else {
+        alert("Part not found.");
+      }
+    }
+
+    function addOrUpdatePart() {
+      const name = document.getElementById('newPartName').value.toLowerCase();
+      const rate = parseInt(document.getElementById('newPartRate').value);
+      const qty = parseInt(document.getElementById('newPartQty').value);
+      if (isNaN(rate) || isNaN(qty)) {
+        alert("Enter valid numbers for rate and quantity.");
+        return;
+      }
+
+      if (parts[name]) {
+        parts[name].quantity += qty;
+        parts[name].rate = rate;
+        alert(`Updated "${name}": Rate ₹${rate}, Quantity ${parts[name].quantity}`);
+      } else {
+        parts[name] = { rate: rate, quantity: qty };
+        alert(`Added new part: "${name}"`);
+      }
+    }
+
+    function deletePart() {
+      const name = document.getElementById('deletePartName').value.toLowerCase();
+      if (parts[name]) {
+        delete parts[name];
+        alert(`Deleted "${name}" from inventory.`);
+      } else {
+        alert("Part not found.");
+      }
+    }
+
+    function displayInventory() {
+      let output = '';
+      for (let key in parts) {
+        output += `${key}: Rate ₹${parts[key].rate}, Quantity: ${parts[key].quantity}\n`;
+      }
+      document.getElementById('inventoryDisplay').value = output;
+    }
+  </script>
+</body>
+</html>
